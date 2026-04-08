@@ -185,58 +185,60 @@ Defined in `backend/app/config.py` (env vars):
 
 ## Sample test cases (input snippets and expected behavior)
 
-LLM **wording** of titles and summaries varies between calls; treat the following as **structural** expectations: valid syntax flag, finding categories, and that security/logic issues are surfaced. Example shapes were captured under `eval/runs/20260408T125101Z/`.
+LLM **wording** of titles and summaries varies between calls; treat the following as **structural** expectations: valid syntax flag, finding categories, and that security/logic issues are surfaced. Snippets align with the eval seed cases (e.g. `py_sqli_concat`, `ts_xss_innerhtml`, `java_runtime_exec`); example API shapes appear under `eval/runs/20260408T125101Z/`.
 
-### 1. Python — logic bug and division by zero
+### 1. Python — SQL injection via string-built query (`py_sqli_concat`)
 
 **Input code:**
 
 ```python
-def avg(a, b):
-    return (a + b) / (a - b)
+def get_user_data(user_id):
+    query = "SELECT * FROM users WHERE id = " + str(user_id)
+    cursor.execute(query)
+    return cursor.fetchall()
 ```
 
 **Expected (representative):**
 
 - `syntax.valid` → `true`
-- Findings include **logic** items such as: wrong formula for an “average”, **`ZeroDivisionError`** when `a == b`, and possibly **style** (misleading name `avg`).
-- `better_implementation_code` often suggests `(a + b) / 2`.
+- **Security:** SQL injection / unsafe query construction; expect guidance toward **parameterized** queries (placeholders + bound parameters), not string concatenation—even with `str(user_id)`.
+- **Style / API clarity:** possible nudges on **type hints**, **docstrings**, or narrowing what is returned instead of **`fetchall()`** when a single row would do.
+- **Performance / design:** may mention fetching entire rows vs. selecting explicit columns or streaming large result sets.
 
-### 2. Java — SQL injection pattern
+### 2. TypeScript — XSS via `innerHTML` (`ts_xss_innerhtml`)
 
-**Input code (illustrative fragment):**
+**Input code:**
 
-```java
-public ResultSet userById(Statement st, String id) throws SQLException {
-  String sql = "SELECT * FROM users WHERE id = " + id;
-  return st.executeQuery(sql);
+```typescript
+export function renderTitle(name: string): void {
+  const el = document.getElementById("title");
+  if (el) el.innerHTML = "<h1>" + name + "</h1>";
 }
 ```
 
 **Expected (representative):**
 
-- `syntax.valid` → `true` (if the full snippet compiles in context)
-- At least one **security** finding: SQL injection via string concatenation; suggestion to use **`PreparedStatement`** and `?` placeholders.
-- Possible **logic** findings: resource handling / returning raw `ResultSet`.
+- `syntax.valid` → `true`
+- **Security:** **XSS** risk from interpolating user-controlled `name` into **`innerHTML`**; expect **`textContent`**, safe DOM APIs, or a trusted sanitizer/templating approach.
+- Possible **logic**/**style** notes on null handling, escaping, or separating structure from untrusted data.
 
-### 3. Python — command injection via `shell=True`
+### 3. Java — command injection via `Runtime.exec` (`java_runtime_exec`)
 
 **Input code:**
 
-```python
-import subprocess
-
-def run_tool(user_arg: str) -> str:
-    return subprocess.check_output(
-        f"grep {user_arg} /tmp/data.txt", shell=True, text=True
-    )
+```java
+public class Shell {
+  public static void ping(String host) throws Exception {
+    Runtime.getRuntime().exec("ping -c 1 " + host);
+  }
+}
 ```
 
 **Expected (representative):**
 
 - `syntax.valid` → `true`
-- **Security** finding: shell injection; suggestion to use argument list form without `shell=True`.
-- Possible **performance** (unnecessary shell) and **logic** (error handling) findings.
+- **Security:** **command injection** through unsanitized `host` passed to a shell-style string; expect **`ProcessBuilder`** with a fixed argv (no shell), strict **validation** / allowlist of hosts, or platform-specific safe APIs.
+- Possible **logic** findings: ignoring **`Process`** streams and exit status, error handling, or portability (`ping` flags differ by OS).
 
 ### Automated tests in the repo
 
