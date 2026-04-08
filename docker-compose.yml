@@ -1,0 +1,9 @@
+# Build the sandbox image (matches SANDBOX_IMAGE, e.g. cellebrite-code-sandbox:local):
+#   docker compose build sandbox
+#
+# Do not `docker compose up` this service for normal use; the API runs `docker run` per request.
+
+services:
+  sandbox:
+    build: ./sandbox
+    image: cellebrite-code-sandbox:local

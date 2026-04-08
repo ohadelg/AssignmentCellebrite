@@ -1,0 +1,61 @@
+:root {
+  --bg: #131314;
+  --surface-low: #1c1c1f;
+  --surface-high: #252528;
+  --surface-highest: #2e2e32;
+  --on-surface: #e5e2e3;
+  --on-surface-muted: rgba(229, 226, 227, 0.65);
+  --outline-variant: rgba(229, 226, 227, 0.12);
+
+  --primary: #00e5ff;
+  --on-primary: #0a1214;
+  --primary-dim: rgba(0, 229, 255, 0.12);
+  --primary-glow: rgba(0, 229, 255, 0.35);
+
+  --security: #ff4d4d;
+  --security-soft: rgba(255, 77, 77, 0.14);
+  --performance: #ffd700;
+  --performance-soft: rgba(255, 215, 0, 0.12);
+  --logic-soft: rgba(0, 229, 255, 0.1);
+  --style-soft: rgba(229, 226, 227, 0.08);
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-float: 0 24px 40px -10px rgba(28, 28, 31, 0.55);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--on-surface);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+select {
+  font-family: var(--font-ui);
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+}
