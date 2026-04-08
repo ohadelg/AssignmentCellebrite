@@ -11,6 +11,7 @@ from app.models import Finding, Language, SyntaxResult
 
 logger = logging.getLogger(__name__)
 
+# BEGIN SYSTEM_INSTRUCTION
 SYSTEM_INSTRUCTION = """You are an expert code reviewer. Analyze code systematically.
 Output must be valid JSON only, matching the requested schema.
 Categories: security (vulnerabilities, injection), performance (efficiency, algorithms), logic (bugs, edge cases), style (formatting, naming, maintainability, best practices).
@@ -18,7 +19,9 @@ Be specific and actionable. Reference line numbers when clear from the code.
 
 Also produce better_implementation_code: a complete, idiomatic rewrite that addresses the main issues (same intent and public behavior where possible).
 And better_implementation_explanation: a clear paragraph for a developer on what you changed and why (security, API choices, style). Use plain language."""
+# END SYSTEM_INSTRUCTION
 
+# BEGIN REVIEW_USER_TEMPLATE
 REVIEW_USER_TEMPLATE = """Programming language: {language}
 
 --- Syntax validation (from static analysis) ---
@@ -33,6 +36,7 @@ Valid: {syntax_valid}
 Produce a structured code review covering security, performance, logic, and style.
 Include a concrete improved code sample and a short explanation of the improvements.
 If syntax is invalid, still mention parse/syntax issues briefly under logic or style, but focus on what you can infer."""
+# END REVIEW_USER_TEMPLATE
 
 
 class GeminiReviewError(Exception):
