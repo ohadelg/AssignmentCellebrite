@@ -32,13 +32,36 @@ Environment variables are loaded from `backend/.env` or a `.env` at the reposito
 
 ## Demo video
 
-The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission ([`docs/demo-4x.mp4`](docs/demo-4x.mp4): H.264, ~54s wall time, no audio).
+The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission. File in the repo: **[`docs/demo-4x.mp4`](docs/demo-4x.mp4)** (H.264, ~54s wall time, no audio, under GitHub’s ~10 MB upload limit).
 
-**Embedding in this README:** the tag below works in many Markdown previews (VS Code, some viewers). **GitHub’s web UI may not render `<video>`** in README files; if it does not, use the file link above or attach the same MP4 to your submission portal.
+### Watch on GitHub (no extra setup)
 
-<video controls width="100%" style="max-width: 960px" src="./docs/demo-4x.mp4">
-  Your viewer does not support inline video. Open <a href="./docs/demo-4x.mp4">docs/demo-4x.mp4</a> directly.
-</video>
+On **github.com**, a normal Markdown link to the committed file opens the **file view**, which includes GitHub’s own video player:
+
+**[▶ Play demo video](docs/demo-4x.mp4)**
+
+(After you push, that resolves to `…/blob/…/docs/demo-4x.mp4` — use the **Play** control on that page.)
+
+### Inline player *inside* the README (optional)
+
+GitHub **does not** inline-play videos that live only inside the repo (relative paths or `raw.githubusercontent.com` in a `<video>` tag are ignored or stripped). It **does** show a native player when the README contains a URL to a file GitHub stored from the **web editor upload** — the link looks like `https://user-images.githubusercontent.com/…/….mp4` (same mechanism as issues/PRs). See the working bare-URL style in [huntharo/video-test](https://github.com/huntharo/video-test/blob/main/README.md).
+
+**One-time steps** so the demo plays directly on the repo home page:
+
+1. Push this repository to GitHub.
+2. Open **`README.md`** on GitHub → click **Edit** (pencil).
+3. Put the cursor **on its own line** where you want the inline video (e.g. under this list).
+4. Drag **`docs/demo-4x.mp4`** from your machine into the editor (or use **Attach files**). Wait for the upload to finish.
+5. GitHub will insert a long `https://user-images.githubusercontent.com/…mp4` URL. **Leave that URL alone on its own line** (or wrap it in `<video controls src="…" width="100%"></video>` — both work on github.com).
+6. **Commit** the change to your default branch.
+
+The file stays in **`docs/demo-4x.mp4`** for clones and assignments; the extra line is only a hosted copy for README rendering.
+
+### Local / VS Code Markdown preview
+
+Below works in many desktop previews; **github.com usually hides this tag** — use the **[▶ Play demo video](docs/demo-4x.mp4)** link or the upload steps above on GitHub.
+
+<video controls width="100%" style="max-width: 960px" src="./docs/demo-4x.mp4"></video>
 
 ## Setup and installation
 
