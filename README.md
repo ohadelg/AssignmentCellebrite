@@ -22,11 +22,12 @@ flowchart LR
   FastAPI --> Sandbox
 ```
 
-| Layer | Stack |
-|--------|--------|
-| Frontend | React 19, TypeScript, Vite 8, Monaco Editor |
-| Backend | FastAPI, Pydantic Settings, `google-genai`, tree-sitter |
+| Layer     | Stack                                                                           |
+| --------- | ------------------------------------------------------------------------------- |
+| Frontend  | React 19, TypeScript, Vite 8, Monaco Editor                                     |
+| Backend   | FastAPI, Pydantic Settings, `google-genai`, tree-sitter                         |
 | Execution | Host or Docker image `cellebrite-code-sandbox:local` (see `sandbox/Dockerfile`) |
+
 
 Environment variables are loaded from `backend/.env` or a `.env` at the repository root (see [Configuration](#configuration)).
 
@@ -38,38 +39,11 @@ Environment variables are loaded from `backend/.env` or a `.env` at the reposito
 
 ## Demo video
 
-The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission. File in the repo: **[`docs/demo-4x.mp4`](docs/demo-4x.mp4)** (H.264, ~54s wall time, no audio, under GitHub’s ~10 MB upload limit).
+The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission (H.264, ~54s wall time, no audio). Open the file here:
 
-<p align="center">
-  <video controls width="920" src="docs/demo-4x.mp4">
-    <a href="docs/demo-4x.mp4">Open demo video (MP4)</a>
-  </video>
-</p>
+**[▶ Watch demo video — `docs/demo-4x.mp4`](docs/demo-4x.mp4)**
 
-If no player appears on **github.com** (relative `<video>` is often stripped there), use **[▶ Play demo video](docs/demo-4x.mp4)** or the upload steps below.
-
-### Watch on GitHub (no extra setup)
-
-On **github.com**, a normal Markdown link to the committed file opens the **file view**, which includes GitHub’s own video player:
-
-**[▶ Play demo video](docs/demo-4x.mp4)**
-
-(After you push, that resolves to `…/blob/…/docs/demo-4x.mp4` — use the **Play** control on that page.)
-
-### Inline player *inside* the README (optional)
-
-GitHub **does not** inline-play videos that live only inside the repo (relative paths or `raw.githubusercontent.com` in a `<video>` tag are ignored or stripped). It **does** show a native player when the README contains a URL to a file GitHub stored from the **web editor upload** — the link looks like `https://user-images.githubusercontent.com/…/….mp4` (same mechanism as issues/PRs). See the working bare-URL style in [huntharo/video-test](https://github.com/huntharo/video-test/blob/main/README.md).
-
-**One-time steps** so the demo plays directly on the repo home page:
-
-1. Push this repository to GitHub.
-2. Open **`README.md`** on GitHub → click **Edit** (pencil).
-3. Put the cursor **on its own line** where you want the inline video (e.g. under this list).
-4. Drag **`docs/demo-4x.mp4`** from your machine into the editor (or use **Attach files**). Wait for the upload to finish.
-5. GitHub will insert a long `https://user-images.githubusercontent.com/…mp4` URL. **Leave that URL alone on its own line** (or wrap it in `<video controls src="…" width="100%"></video>` — both work on github.com).
-6. **Commit** the change to your default branch.
-
-The file stays in **`docs/demo-4x.mp4`** for clones and assignments; the extra line is only a hosted copy for README rendering.
+After you push to **github.com**, that link opens the repository file view with GitHub’s built-in player. From a local clone, the same relative path is `docs/demo-4x.mp4`.
 
 ## Setup and installation
 
@@ -152,20 +126,24 @@ Runs static syntax validation (tree-sitter) and an asynchronous **Gemini** revie
 
 **Request body (JSON):**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `language` | `"python"` \| `"typescript"` \| `"java"` | Source language |
-| `code` | string | Source code (size limits apply; see config) |
+
+| Field      | Type                                   | Description                                 |
+| ---------- | -------------------------------------- | ------------------------------------------- |
+| `language` | `"python"` | `"typescript"` | `"java"` | Source language                             |
+| `code`     | string                                 | Source code (size limits apply; see config) |
+
 
 **Success (200):** `ReviewResponse`
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `syntax` | object | `{ "valid": bool, "errors": [...] }` |
-| `findings` | array | Structured issues: category, title, detail, suggestion, optional severity/lines |
-| `summary` | string | Short overview |
-| `better_implementation_code` | string | Suggested improved code (may be empty) |
-| `better_implementation_explanation` | string | Explanation for the suggestion |
+
+| Field                               | Type   | Description                                                                     |
+| ----------------------------------- | ------ | ------------------------------------------------------------------------------- |
+| `syntax`                            | object | `{ "valid": bool, "errors": [...] }`                                            |
+| `findings`                          | array  | Structured issues: category, title, detail, suggestion, optional severity/lines |
+| `summary`                           | string | Short overview                                                                  |
+| `better_implementation_code`        | string | Suggested improved code (may be empty)                                          |
+| `better_implementation_explanation` | string | Explanation for the suggestion                                                  |
+
 
 **Errors:** `400` invalid input, `503` review unavailable (e.g. API/key/model issues).
 
@@ -175,11 +153,13 @@ Executes code in the configured sandbox (Docker by default).
 
 **Request body (JSON):**
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `language` | `"python"` \| `"typescript"` \| `"java"` | Runtime |
-| `code` | string | Program source |
-| `stdin` | string | Standard input (optional, length capped) |
+
+| Field      | Type                                   | Description                              |
+| ---------- | -------------------------------------- | ---------------------------------------- |
+| `language` | `"python"` | `"typescript"` | `"java"` | Runtime                                  |
+| `code`     | string                                 | Program source                           |
+| `stdin`    | string                                 | Standard input (optional, length capped) |
+
 
 **Success (200):** `RunResponse` — `exit_code`, `stdout`, `stderr`, `timed_out`, `duration_ms`, optional `error`.
 
@@ -189,17 +169,19 @@ Executes code in the configured sandbox (Docker by default).
 
 Defined in `backend/app/config.py` (env vars):
 
-| Variable | Purpose |
-|----------|---------|
-| `GEMINI_API_KEY` | Google AI API key for reviews |
-| `GEMINI_MODEL` | Model id (default `gemini-2.5-flash`) |
-| `REVIEW_TIMEOUT_SEC` | LLM timeout |
-| `CORS_ORIGINS` | Comma-separated allowed origins |
-| `JAVA_HOME` | Host JDK for Java-related paths when applicable |
-| `MAX_CODE_BYTES`, `MAX_STDIN_BYTES`, `MAX_OUTPUT_BYTES` | Input/output limits |
-| `SANDBOX_ENABLED` | Enable containerized runs |
-| `SANDBOX_IMAGE` | Docker image name (default `cellebrite-code-sandbox:local`) |
-| `SANDBOX_TIMEOUT_SEC`, `SANDBOX_MEMORY_MB`, `SANDBOX_CPUS` | Sandbox resource limits |
+
+| Variable                                                   | Purpose                                                     |
+| ---------------------------------------------------------- | ----------------------------------------------------------- |
+| `GEMINI_API_KEY`                                           | Google AI API key for reviews                               |
+| `GEMINI_MODEL`                                             | Model id (default `gemini-2.5-flash`)                       |
+| `REVIEW_TIMEOUT_SEC`                                       | LLM timeout                                                 |
+| `CORS_ORIGINS`                                             | Comma-separated allowed origins                             |
+| `JAVA_HOME`                                                | Host JDK for Java-related paths when applicable             |
+| `MAX_CODE_BYTES`, `MAX_STDIN_BYTES`, `MAX_OUTPUT_BYTES`    | Input/output limits                                         |
+| `SANDBOX_ENABLED`                                          | Enable containerized runs                                   |
+| `SANDBOX_IMAGE`                                            | Docker image name (default `cellebrite-code-sandbox:local`) |
+| `SANDBOX_TIMEOUT_SEC`, `SANDBOX_MEMORY_MB`, `SANDBOX_CPUS` | Sandbox resource limits                                     |
+
 
 ## Sample test cases (input snippets and expected behavior)
 
@@ -275,7 +257,7 @@ cd backend && source .venv/bin/activate && pytest -q
 
 - Review text and finding counts **vary** by model and temperature; evaluation should check structure and presence of issue types, not exact strings.
 - Very large files are rejected by byte limits; streaming or chunked review could be added later.
-- **GitHub README** may not play inline video; keep **`docs/demo-4x.mp4`** as the portable artifact.
+- **GitHub README** may not play inline video; keep **[docs/demo-4x.mp4](docs/demo-4x.mp4)** as the portable artifact.
 - Optional: root-level `package.json` workspace file if your grader expects a single manifest at repo root (currently **`frontend/package.json`** is authoritative for Node).
 
 ## Dependencies
@@ -287,10 +269,13 @@ cd backend && source .venv/bin/activate && pytest -q
 
 **Assignment checklist mapping**
 
-| Requirement | Location |
-|-------------|----------|
-| Source (frontend + backend) | `frontend/`, `backend/`, `sandbox/` |
-| README (setup, API, design, limits) | This file |
-| Dependencies listed | `backend/requirements.txt`, `frontend/package.json` |
-| Demo | [`docs/demo-4x.mp4`](docs/demo-4x.mp4) + [Setup and installation](#setup-and-installation) |
-| Sample test cases | [Sample test cases](#sample-test-cases-input-snippets-and-expected-behavior) section |
+
+| Requirement                         | Location                                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------------------------ |
+| Source (frontend + backend)         | `frontend/`, `backend/`, `sandbox/`                                                        |
+| README (setup, API, design, limits) | This file                                                                                  |
+| Dependencies listed                 | `backend/requirements.txt`, `frontend/package.json`                                        |
+| Demo                                | [docs/demo-4x.mp4](docs/demo-4x.mp4) + [Setup and installation](#setup-and-installation) |
+| Sample test cases                   | [Sample test cases](#sample-test-cases-input-snippets-and-expected-behavior) section       |
+
+
