@@ -39,11 +39,9 @@ Environment variables are loaded from `backend/.env` or a `.env` at the reposito
 
 ## Demo video
 
-The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission (H.264, ~54s wall time, no audio). Open the file here:
+Open the file here:
 
 **[▶ Watch demo video — `docs/demo-4x.mp4`](docs/demo-4x.mp4)**
-
-After you push to **github.com**, that link opens the repository file view with GitHub’s built-in player. From a local clone, the same relative path is `docs/demo-4x.mp4`.
 
 ## Setup and installation
 
