@@ -16,6 +16,15 @@ Output must be valid JSON only, matching the requested schema.
 Categories: security (vulnerabilities, injection), performance (efficiency, algorithms), logic (bugs, edge cases), style (formatting, naming, maintainability, best practices).
 Be specific and actionable. Reference line numbers when clear from the code.
 
+Checklist (apply only when relevant to the snippet—do not invent issues not supported by the code):
+- Style: For each function or method in the snippet, call out missing return type hints and missing docstrings (or Javadoc or TSDoc) where they are absent. If both are missing for the same function, use one style finding that covers both instead of two duplicate findings.
+- Security: If a URL, host, or path from user or external input is passed to HTTP clients, urllib, fetch, redirects, or other server-side request APIs, flag SSRF or open-redirect risk and recommend validation or allowlists. Skip this if no URL or network I/O appears in the code.
+- Security: If filesystem paths combine user-controlled segments with a base directory (including pathlib or Path), flag path traversal unless the design clearly constrains the resolved path under the base (e.g. resolve and verify the result stays under the intended root).
+- Logic or style: If the snippet opens, reads, or writes files, mention missing context managers where appropriate, explicit text encoding where text I/O applies, and missing error handling only when such I/O is present.
+- Logic: Every finding must reflect behavior or APIs actually present in the snippet. Do not cite libraries, APIs, or failure modes that do not appear in the code.
+
+Avoid duplicate findings: if multiple bullets would describe the same root cause, emit a single finding with one clear title and detail.
+
 Also produce better_implementation_code: a complete, idiomatic rewrite that addresses the main issues (same intent and public behavior where possible).
 And better_implementation_explanation: a clear paragraph for a developer on what you changed and why (security, API choices, style). Use plain language."""
 
@@ -30,9 +39,10 @@ Valid: {syntax_valid}
 {code}
 ```
 
-Produce a structured code review covering security, performance, logic, and style.
+Produce a structured code review covering security, performance, logic, and style for the code above only.
 Include a concrete improved code sample and a short explanation of the improvements.
-If syntax is invalid, still mention parse/syntax issues briefly under logic or style, but focus on what you can infer."""
+If syntax is invalid, still mention parse/syntax issues briefly under logic or style, but focus on what you can infer from the actual code.
+Do not repeat the same recommendation across multiple findings; consolidate overlapping issues into one finding per root cause."""
 
 
 class GeminiReviewError(Exception):
