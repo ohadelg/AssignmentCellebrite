@@ -30,9 +30,23 @@ flowchart LR
 
 Environment variables are loaded from `backend/.env` or a `.env` at the repository root (see [Configuration](#configuration)).
 
+## Screenshot
+
+<p align="center">
+  <img src="docs/view1.png" alt="GenAI Code Review — web UI (editor, review, and run panels)" width="920" />
+</p>
+
 ## Demo video
 
 The walkthrough was recorded on macOS, then **compressed and sped up to 4×** for submission. File in the repo: **[`docs/demo-4x.mp4`](docs/demo-4x.mp4)** (H.264, ~54s wall time, no audio, under GitHub’s ~10 MB upload limit).
+
+<p align="center">
+  <video controls width="920" src="docs/demo-4x.mp4">
+    <a href="docs/demo-4x.mp4">Open demo video (MP4)</a>
+  </video>
+</p>
+
+If no player appears on **github.com** (relative `<video>` is often stripped there), use **[▶ Play demo video](docs/demo-4x.mp4)** or the upload steps below.
 
 ### Watch on GitHub (no extra setup)
 
@@ -56,12 +70,6 @@ GitHub **does not** inline-play videos that live only inside the repo (relative 
 6. **Commit** the change to your default branch.
 
 The file stays in **`docs/demo-4x.mp4`** for clones and assignments; the extra line is only a hosted copy for README rendering.
-
-### Local / VS Code Markdown preview
-
-Below works in many desktop previews; **github.com usually hides this tag** — use the **[▶ Play demo video](docs/demo-4x.mp4)** link or the upload steps above on GitHub.
-
-<video controls width="100%" style="max-width: 960px" src="./docs/demo-4x.mp4"></video>
 
 ## Setup and installation
 
